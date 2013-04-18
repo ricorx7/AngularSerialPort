@@ -1,5 +1,6 @@
 #AngularSerialPort
 Application that use Angular for the front-end and Node-webkit to make a back-end that functions like an executable.
+You will need to download [ndoe-webkit](https://github.com/rogerwang/node-webkit) to run the application.
 
 ###To run the application
 	nw.exe app\
