@@ -1,7 +1,18 @@
 'use strict';
 
 /* Controllers */
-var serialApp = angular.module("SerialPortApp", []);
+
+angular.module('myApp.controllers', []).
+  controller('MyCtrl1', [function() {
+
+  }])
+  .controller('MyCtrl2', [function() {
+
+  }]);
+
+
+/* Controllers */
+var serialApp = angular.module("SerialPortCtrl", []);
 
 /* Serial Port Data Service */
 serialApp.factory('SerialPortOptions', function() {
@@ -25,23 +36,23 @@ function SerialPortCtrl($scope, SerialPortOptions) {
 	 */
 	$scope.getPorts = function() {
     
-    //Get the serialport listings
-    require("serialport").list(function (err, ports) {
+		//Get the serialport listings
+		require("serialport").list(function (err, ports) {
 
-	      // Set the response
-	      // Need to use $scope.$apply() because this is within
-	      // another function.
-	      // http://stackoverflow.com/questions/10179488/the-view-is-not-updated-in-angularjs
-	      $scope.$apply(function() { SerialPortOptions.ports = ports; });
+			// Set the response
+			// Need to use $scope.$apply() because this is within
+			// another function.
+			// http://stackoverflow.com/questions/10179488/the-view-is-not-updated-in-angularjs
+			$scope.$apply(function() { SerialPortOptions.ports = ports; });
 	      
-				var portInfo = "";
-				ports.forEach(function (port) {
-					console.log(port.comName);
-					console.log(port.pnpId);
-					console.log(port.manufacturer);
-					
-				});	
-			});
+			var portInfo = "";
+			ports.forEach(function (port) {
+				console.log(port.comName);
+				console.log(port.pnpId);
+				console.log(port.manufacturer);
+				
+			});	
+		});
 	}
 
 	/**
@@ -49,34 +60,33 @@ function SerialPortCtrl($scope, SerialPortOptions) {
 	 */
 	$scope.readData = function() {
 	
-		  //Initialize the serial port
-		  var SerialPort = require("serialport").SerialPort
-		  var serialPort = new SerialPort("COM14", {
-		    baudrate: 115200
-		  });
+		//Initialize the serial port
+		var SerialPort = require("serialport").SerialPort
+		var serialPort = new SerialPort("COM14", {
+		baudrate: 115200
+		});
 
-		  //Open the serial data
-		  serialPort.open(function () {
-			    console.log('open');
-			    $scope.ReadBuffer += "open";
-		    
-		      // Read in the data
-		      serialPort.on('data', function(data) {
-				    console.log('data received: ' + data);
-				
-				    //Display the data
-		        // Need to use $scope.$apply() because this is within
-		        // another function.
-		        // http://stackoverflow.com/questions/10179488/the-view-is-not-updated-in-angularjs
-		        //$scope.$apply(function() { $scope.ReadBuffer += data; });
-		        //$scope.serialData += data;
-		        //$scope.$apply(function() { $scope.serialData += data; });
-		        $scope.$apply(function() { SerialPortOptions.buffer = data });
-		        $scope.buffer = (data + $scope.buffer).substr(0, 5000);
-			    
-		    });
-	      
-		  });
+		//Open the serial data
+		serialPort.open(function () {
+			console.log('open');
+
+			// Read in the data
+			serialPort.on('data', function(data) {
+				console.log('data received: ' + data);
+
+				//Display the data
+				// Need to use $scope.$apply() because this is within
+				// another function.
+				// http://stackoverflow.com/questions/10179488/the-view-is-not-updated-in-angularjs
+				//$scope.$apply(function() { $scope.ReadBuffer += data; });
+				//$scope.serialData += data;
+				//$scope.$apply(function() { $scope.serialData += data; });
+				$scope.$apply(function() { SerialPortOptions.buffer = data });
+				$scope.buffer = (data + $scope.buffer).substr(0, 5000);
+
+			});
+
+		});
 	}
 
 }
@@ -90,7 +100,8 @@ function SerialPortWriterCtrl($scope, SerialPortOptions) {
 	// Buffer from the serial port
 	// This will also set any updates received from the serialport buffer
 	$scope.buffer = SerialPortOptions.buffer;
-	$scope.$watch( function () { return SerialPortOptions.buffer; } , function() { 
+	$scope.$watch( function () { return SerialPortOptions.buffer; } , 
+		function() { 
 			// Set the new options
 			$scope.buffer = SerialPortOptions.buffer;
 
@@ -102,5 +113,20 @@ function SerialPortWriterCtrl($scope, SerialPortOptions) {
 		}, 
 		true 
 	);
+}
+
+function NavigateCtrl($scope) {
+	
+	/**
+	 * Navigate the display.
+	 */
+	$scope.navigate = function() {
+	
+		$(document).ready(function() {
+			$('#main').load('partials/partial2.html');
+		
+		});
+	}
+
 }
 

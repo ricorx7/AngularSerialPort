@@ -1,6 +1,9 @@
 #AngularSerialPort
 Application that use Angular for the front-end and Node-webkit to make a back-end that functions like an executable.
 
+###To run the application
+	nw.exe app\
+
 ###You will need to build the node SerialPort module for node-webkit for your platform
 	cd app\node-modules\serialport
 	nw-gyp configure --target=0.4.2
